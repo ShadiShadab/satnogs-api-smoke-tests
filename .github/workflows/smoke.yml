@@ -1,0 +1,28 @@
+name: smoke
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 1"   # weekly, Monday 06:17 UTC; low frequency to be polite to a community service
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -m "not live" -q
+  live:
+    needs: unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -m "live and not slow" -q --junitxml=report.xml
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: smoke-report, path: report.xml }
