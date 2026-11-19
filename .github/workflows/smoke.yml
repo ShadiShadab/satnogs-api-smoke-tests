@@ -3,6 +3,9 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+env:
+  # Write-method probes stay off in every CI run (push, pull request, manual).
+  SATNOGS_ALLOW_WRITE_PROBES: "0"
 jobs:
   unit:
     runs-on: ubuntu-latest

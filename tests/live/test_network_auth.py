@@ -1,8 +1,11 @@
 """Unauthenticated write attempts must be rejected.
 
-These send DELETE/PATCH/POST with no credentials and an empty body, so they cannot
-change anything; the server must answer 401 with a Token challenge (or 400 for a
-malformed POST body, which is recorded as current behaviour).
+These send DELETE/PATCH/POST with no credentials and an empty body; the server must
+answer 401 with a Token challenge (or 400 for a malformed POST body).
+
+They are disabled by default and never run against public SatNOGS services. They
+run only with SATNOGS_ALLOW_WRITE_PROBES=1 and a loopback or explicitly listed
+non-production SATNOGS_NETWORK_URL (see satnogs_smoke/write_guard.py).
 """
 import pytest
 
