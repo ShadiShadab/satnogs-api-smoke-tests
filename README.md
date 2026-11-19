@@ -29,7 +29,7 @@ Test data is discovered at run time (for example "the most recent observation ve
 
 ## Design choices
 
-- **Read-only and polite.** Only `GET`/`HEAD`, except the negative auth checks, which send no credentials and cannot change anything. One shared session, a descriptive `User-Agent`, a timeout on every call, and a weekly schedule rather than frequent polling.
+- **Read-only and polite.** Only `GET`/`HEAD`, except the negative auth checks, which send no credentials and cannot change anything. One shared session, a descriptive `User-Agent`, a timeout on every call, and no scheduled polling.
 - **One retry for gateway errors only** (`502`/`503`/`504`), so a transient CDN error is not reported as a product failure. Any other status fails immediately.
 - **Offline unit tests** for the helpers (TLE checksum, `Link` header parsing), so CI has a deterministic part that does not depend on the internet.
 - **Configurable target** through environment variables, so the same suite can run against a staging instance.
@@ -52,7 +52,7 @@ python -m pytest -m slow            # the large-response behaviour check
 | `SATNOGS_TIMEOUT_S` | `60` |
 | `SATNOGS_SLOW_RESPONSE_S` | `10` (budget for the list response) |
 
-CI ([.github/workflows/smoke.yml](.github/workflows/smoke.yml)) runs unit tests first, then the live suite on every push, weekly, and on demand, and stores a JUnit report.
+CI ([.github/workflows/smoke.yml](.github/workflows/smoke.yml)) runs unit tests first, then the live suite on every push, pull request and manual run, and stores a JUnit report. There is no scheduled run.
 
 ## Limitations
 
