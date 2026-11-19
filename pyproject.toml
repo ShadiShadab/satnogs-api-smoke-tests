@@ -1,7 +1,7 @@
 [project]
 name = "satnogs-api-smoke-tests"
 version = "0.1.0"
-description = "Read-only smoke tests for the public SatNOGS Network and DB APIs"
+description = "Smoke tests for the public SatNOGS Network and DB APIs"
 requires-python = ">=3.10"
 dependencies = ["requests>=2.31", "pytest>=8"]
 license = {text = "AGPL-3.0-or-later"}
@@ -11,6 +11,6 @@ testpaths = ["tests"]
 addopts = "-ra -m 'not slow'"
 markers = [
     "live: calls the public SatNOGS APIs over the internet",
-    "negative: sends unauthenticated write requests that must be rejected",
+    "negative: unauthenticated write-method probes; disabled by default, never run against public SatNOGS services",
     "slow: large responses; excluded by default, run with -m slow",
 ]
